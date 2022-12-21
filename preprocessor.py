@@ -20,4 +20,9 @@ def get_words(n=6):
 
 
 if __name__ == '__main__':
-    get_words()
+    # get_words()
+
+    """read pickle file and print words"""
+    with open('words/24.pickle', 'rb') as f:
+        words = pickle.load(f)
+    print(words)
