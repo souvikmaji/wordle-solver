@@ -1,15 +1,16 @@
+import collections
 import pickle
 
 
 def get_words(n=6):
     with open('/usr/share/dict/words') as dictionary:
-        words = dictionary.read().splitlines()
+        words = {x.lower() for x in dictionary.read().splitlines()}
 
         """create a dict, with len of words as key and word as value
         save each dict keys in separate pickle file"""
         words_dict = {}
         for word in words:
-            score = len(set(word))
+            score = get_score(word)
 
             if len(word) not in words_dict:
                 words_dict[len(word)] = {score: [word]}
@@ -18,9 +19,17 @@ def get_words(n=6):
             else:
                 words_dict[len(word)][score].append(word)
 
-        for key, value in words_dict.items():
-            with open(f'words/{key}.pickle', 'wb') as f:
-                pickle.dump(value, f)
+        for length, values in words_dict.items():
+            with open(f'words/{length}.pickle', 'wb') as f:
+                word_list = []
+                for key in sorted(values.keys(), reverse=True):
+                    word_list.extend(values[key])
+
+                pickle.dump(word_list, f)
+
+
+def get_score(word):
+    return len(set(word))
 
 
 if __name__ == '__main__':
