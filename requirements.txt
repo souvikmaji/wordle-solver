@@ -1,1 +1,2 @@
-typer[all]
+typer[all]~=0.7.0
+

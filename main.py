@@ -1,6 +1,8 @@
 import pickle
 
 import typer
+from rich import print
+from rich.prompt import Prompt
 
 
 def get_words(n=6) -> dict[int, list[str]]:
@@ -12,8 +14,17 @@ def get_words(n=6) -> dict[int, list[str]]:
 
 
 def print_words(words: list):
-    for word in words[:10]:
-        print(word)
+    more = True
+    start, stop = 0, 10
+
+    while more:
+        for word in words[start:stop]:
+            print(word)
+
+        more = typer.confirm("need more?")
+        start, stop = stop, stop + 10
+
+
 
 
 def wordle(words: list[str], containing: str, not_containing: str):  # , specific_postions: Dict[int, str] = None):
@@ -35,8 +46,8 @@ def main(n: int = 6):
         words = wordle(words, containing, not_containing)
         print_words(words)
 
-        containing = typer.prompt("Enter letters to contain: ", default=containing)
-        not_containing = typer.prompt("Enter letters to not contain: ", default=not_containing)
+        containing = Prompt.ask("Enter letters to contain: ", default=containing)
+        not_containing = Prompt.ask("Enter letters to [bold] not [/bold] contain: ", default=not_containing)
 
     print(words)
 
