@@ -9,10 +9,14 @@ def get_words(n=6):
         save each dict keys in separate pickle file"""
         words_dict = {}
         for word in words:
+            score = len(set(word))
+
             if len(word) not in words_dict:
-                words_dict[len(word)] = [word]
+                words_dict[len(word)] = {score: [word]}
+            elif score not in words_dict[len(word)]:
+                words_dict[len(word)][score] = [word]
             else:
-                words_dict[len(word)].append(word)
+                words_dict[len(word)][score].append(word)
 
         for key, value in words_dict.items():
             with open(f'words/{key}.pickle', 'wb') as f:
@@ -20,9 +24,9 @@ def get_words(n=6):
 
 
 if __name__ == '__main__':
-    # get_words()
+    get_words()
 
     """read pickle file and print words"""
-    with open('words/24.pickle', 'rb') as f:
+    with open('words/6.pickle', 'rb') as f:
         words = pickle.load(f)
     print(words)
