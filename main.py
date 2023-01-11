@@ -25,9 +25,7 @@ def print_words(words: list):
         start, stop = stop, stop + 10
 
 
-
-
-def wordle(words: list[str], containing: str, not_containing: str):  # , specific_postions: Dict[int, str] = None):
+def wordle(words: list[str], containing: set[str], not_containing: set[str]):  # , specific_postions: Dict[int, str] = None):
 
     if containing and not_containing:
         words = [word for word in words if all(letter in word for letter in containing) and
@@ -37,17 +35,23 @@ def wordle(words: list[str], containing: str, not_containing: str):  # , specifi
 
 
 def main(n: int = 6):
-    words = get_words(n=6)
+    words = get_words(n)
 
-    containing = ''
-    not_containing = ''
+    containing = set()
+    not_containing = set()
 
     while len(words) != 1:
         words = wordle(words, containing, not_containing)
         print_words(words)
 
-        containing = Prompt.ask("Enter letters to contain: ", default=containing)
-        not_containing = Prompt.ask("Enter letters to [bold] not [/bold] contain: ", default=not_containing)
+        containing = set(Prompt.ask("Enter letters to contain ", default=containing))
+        not_containing = set(Prompt.ask("Enter letters to [bold] not [/bold] contain ", default=not_containing))
+
+        """if containing and not containing has common str, prompt an error message and ask to re-enter"""
+        if containing.intersection(not_containing):
+            typer.secho("Letters can't be both containing and not containing", fg=typer.colors.RED)
+            containing = set()
+            not_containing = set()
 
     print(words)
 
