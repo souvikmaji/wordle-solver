@@ -28,7 +28,8 @@ def get_words(n=6):
 
 
 def get_score(word):
-    return len(set(word))
+    uniqueness = len(set(word))
+    return uniqueness
 
 
 if __name__ == '__main__':

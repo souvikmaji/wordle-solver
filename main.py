@@ -44,8 +44,8 @@ def main(n: int = 6):
         words = wordle(words, containing, not_containing)
         print_words(words)
 
-        containing = set(Prompt.ask("Enter letters to contain ", default=containing))
-        not_containing = set(Prompt.ask("Enter letters to [bold] not [/bold] contain ", default=not_containing))
+        containing = set(Prompt.ask("Enter letters to contain", default=list(containing), show_default=True))
+        not_containing = set(Prompt.ask("Enter letters to [bold] not [/bold] contain", default=list(not_containing)))
 
         """if containing and not containing has common str, prompt an error message and ask to re-enter"""
         if containing.intersection(not_containing):
